@@ -5,7 +5,7 @@ const Subscriber = require("../models/subscriber");
 router.get("/", async (req, res) => {
   try {
     const subscribers = await Subscriber.find();
-    res.json(subscribers);
+    res.json("Hell yeah");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
