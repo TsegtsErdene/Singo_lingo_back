@@ -10,6 +10,6 @@ POST  http://localhost:3000/subscribers
 Content-Type: application/json
 
 {
-    "name": "Test",
+    "name": "Tesst",
     "subscriberToChannel": "Tsegtsee"
 }
