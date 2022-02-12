@@ -2,14 +2,15 @@ GET http://localhost:3000/subscribers
 
 ###
 
-GET http://localhost:3000/subscribers/14
+get http://localhost:3000/User/all
 
 ###
+DELETE http://localhost:3000/User/62077c553088650b9017640e
 
-POST  http://localhost:3000/subscribers
+###
+POST  http://localhost:3000/User
 Content-Type: application/json
 
 {
-    "name": "Tesst",
-    "subscriberToChannel": "Tsegtsee"
+    "username": "dongos"
 }

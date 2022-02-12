@@ -3,6 +3,12 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const demo = require("../src/models/Novel/NovelController");
+//const bookmarkRouter = require("./models/Bookmark/BookmarkController");
+//const categoryRouter = require("./models/Category/CategoryController");
+//const chapterRouter = require("./models/Chapter/ChapterController");
+//const novelRouter = require("./models/Novel/NovelController");
+const userRouter = require("./models/User/UserController");
+
 app.use(bodyParser.json());
 
 mongoose.connect("mongodb://localhost/novel", { useNewUrlParser: true });
@@ -12,7 +18,10 @@ db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
 
-const subscribersRouter = require("./routes/subscribers");
-app.use("/subscribers", subscribersRouter);
+//app.use("/Bookmark", bookmarkRouter);
+//app.use("/Category", categoryRouter);
+//app.use("/Chapter", chapterRouter);
+//app.use("/Novel", novelRouter);
+app.use("/User", userRouter);
 
 app.listen(3000, () => console.log("Server Started"));
