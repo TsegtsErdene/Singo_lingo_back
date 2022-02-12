@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+const demo = require("../src/models/Novel/NovelController");
 app.use(bodyParser.json());
 
 mongoose.connect("mongodb://localhost/novel", { useNewUrlParser: true });
@@ -12,7 +12,7 @@ db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
 
-// const subscribersRouter = require("./routes/subscribers");
-// app.use("/subscribers", subscribersRouter);
+const subscribersRouter = require("./routes/subscribers");
+app.use("/subscribers", subscribersRouter);
 
 app.listen(3000, () => console.log("Server Started"));
