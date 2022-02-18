@@ -4,22 +4,22 @@ const User = require("./User");
 const Bookmark = require("../Bookmark/Bookmark");
 
 router.get("/all", async (req, res) => {
-  User.find({}, (err, category) => {
+  User.find({}, (err, user) => {
     if (err) throw err;
 
     return res.json({
       code: 0,
-      category,
+      user,
     });
   });
 });
 
 router.get("/:user_id", (req, res) => {
-  User.findById(req.params.user_id, (err, category) => {
+  User.findById(req.params.user_id, (err, user) => {
     if (err) throw err;
     return res.json({
       code: 0,
-      category,
+      user,
     });
   });
 });

@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:category_id", (req, res) => {
-  Novel.find(
+  Category.findById(
     {
       category: req.params.category_id,
     },
@@ -29,16 +29,16 @@ router.get("/:category_id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  req.assert("title", "Title is not empty").notEmpty();
+  // req.assert("title", "Title is not empty").notEmpty();
 
-  const errors = req.validationErrors();
+  // const errors = req.validationErrors();
 
-  if (errors) {
-    return res.json({
-      code: 1,
-      errors,
-    });
-  }
+  // if (errors) {
+  //   return res.json({
+  //     code: 1,
+  //     errors,
+  //   });
+  // }
 
   Category.create(req.body, (err, category) => {
     if (err) throw err;
@@ -49,4 +49,4 @@ router.post("/", (req, res) => {
   });
 });
 
-module.export = router;
+module.exports = router;

@@ -14,3 +14,29 @@ Content-Type: application/json
 {
     "username": "dongos"
 }
+###
+
+GET  http://localhost:3000/Novel
+Content-Type: application/json
+
+{
+    "title": "dongos",
+    "total_chapter":"something",
+    "author":"something",
+    "description":"hehe",
+    "rating":"woaw",
+    "started_year":23,
+    "country":"mongolia",
+    "categories":"620f8fb9ef9a0490c58480d7",
+    "created_by":"620f8eb2a41fcb0493f05b65"
+}
+
+###
+
+GET   http://localhost:3000/Category
+Content-Type: application/json
+
+{
+    "title": "test"
+   
+}
