@@ -21,7 +21,7 @@ const NovelSchema = new Schema(
             required: true
         },
         rating: {
-            type: String,
+            type: Number,
             required: true
         },
         started_year: {
