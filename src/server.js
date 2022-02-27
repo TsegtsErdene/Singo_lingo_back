@@ -11,7 +11,9 @@ const userRouter = require("./models/User/UserController");
 
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb://localhost/novel", { useNewUrlParser: true });
+mongoose.connect(process.env.CUSTOMCONNSTR_MyConnectionString, {
+  useNewUrlParser: true,
+});
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
