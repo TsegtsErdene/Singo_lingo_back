@@ -20,8 +20,12 @@ const NovelSchema = new Schema({
     required: true,
   },
   rating: {
-    type: String,
+    type: Number,
     required: true,
+  },
+  cover_url: {
+    type: String,
+    required: true
   },
   started_year: {
     type: Number,
