@@ -6,14 +6,14 @@ var logger = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const bookmarkRouter = require("./models/Bookmark/BookmarkController");
-const categoryRouter = require("./models/Category/CategoryController");
-const chapterRouter = require("./models/Chapter/ChapterController");
-const novelRouter = require("./models/Novel/NovelController");
-const userRouter = require("./models/User/UserController");
-const homeRouter = require("./models/Home/HomeController");
-var indexRouter = require("./index");
-var usersRouter = require("./users");
+const bookmarkRouter = require("./src/models/Bookmark/BookmarkController");
+const categoryRouter = require("./src/models/Category/CategoryController");
+const chapterRouter = require("./src/models/Chapter/ChapterController");
+const novelRouter = require("./src/models/Novel/NovelController");
+const userRouter = require("./src/models/User/UserController");
+const homeRouter = require("./src/models/Home/HomeController");
+var indexRouter = require("./src/index");
+var usersRouter = require("./src/users");
 
 var app = express();
 
@@ -41,7 +41,6 @@ app.use(express.json());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/", homeRouter);
 app.use("/Bookmark", bookmarkRouter);
 app.use("/Category", categoryRouter);
 app.use("/Chapter", chapterRouter);
