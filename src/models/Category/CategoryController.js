@@ -4,13 +4,14 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  Category.find({}, (err, category) => {
-    if (err) throw err;
-    return res.json({
-      code: 0,
-      category,
-    });
-  });
+  Category.find({})
+    .exec((err, category) => {
+      if (err) throw err;
+      return res.json({
+        code: 0,
+        category,
+      });
+    })
 });
 
 router.get("/:category_id", (req, res) => {

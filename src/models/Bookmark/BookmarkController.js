@@ -3,18 +3,14 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  await Bookmark.find(
-    {
-      user: req.params.id,
-    },
-    (err, bookmark) => {
+  await Bookmark.find({})
+    .exec((err, bookmark) => {
       if (err) throw err;
       return res.json({
         code: 0,
         bookmark,
       });
-    }
-  );
+    })
 });
 
 router.post("/", (req, res) => {

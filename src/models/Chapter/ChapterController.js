@@ -9,8 +9,7 @@ var ReadingChapter = require("./ReadingChapter");
 router.get("/", (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
-  Chapter.paginate(
-    {},
+  Chapter.paginate({},
     {
       limit,
       page,
