@@ -6,24 +6,25 @@ const _ = require("lodash");
 const Novel = require("./Novel");
 
 router.get("/", (req, res) => {
-  Novel.find({}, (err, novel) => {
+  Novel.find({}, (err, novels) => {
     if (err) throw err;
 
     return res.json({
       code: 0,
-      novel,
+      novels,
     });
-  });
+  }).populate(['categories']);
 });
 
 router.get("/:novel_id", (req, res) => {
-  Novel.findById(req.params.novel_id, (err, novel) => {
+  Novel.findOne({_id: req.params.novel_id}, (err, novel) => {
     if (err) throw err;
+    
     return res.json({
       code: 0,
       novel,
     });
-  });
+  }).populate(['categories'])
 });
 
 router.post("/", (req, res) => {

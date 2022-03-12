@@ -4,12 +4,11 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  Category.find({})
-    .exec((err, category) => {
+  Category.find({}, (err, categories) => {
       if (err) throw err;
       return res.json({
         code: 0,
-        category,
+        categories,
       });
     })
 });

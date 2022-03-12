@@ -4,6 +4,7 @@ var router = express.Router();
 var _ = require("lodash");
 
 var Chapter = require("./Chapter");
+var Novel = require('../Novel/Novel')
 var ReadingChapter = require("./ReadingChapter");
 
 router.get("/", (req, res) => {
@@ -51,10 +52,22 @@ router.post("/", (req, res) => {
 
   Chapter.create(req.body, (err, chapter) => {
     if (err) throw err;
-    return json({
-      code: 0,
-      chapter,
-    });
+    
+    Novel.findById(chapter.novel, (err, novel) => {
+      if(err) throw err
+      
+      Novel.updateOne({id: chapter.novel}, {
+        total_chapter: novel.total_chapter + 1
+      }, (err) => {
+        if(err) throw err
+        return json({
+          code: 0,
+          chapter,
+        });
+      })
+
+    })
+    
   });
 });
 
