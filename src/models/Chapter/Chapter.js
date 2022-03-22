@@ -8,9 +8,14 @@ const ChapterSchema = new Schema(
             type: String,
             required: true
         },
-        chapter: {
-            type: String,
+        episode: {
+            type: Number,
             required: true
+        },
+        readProcess: {
+            type: Number,
+            required: true,
+            default: 0
         },
         duration: {
             type: Number,
