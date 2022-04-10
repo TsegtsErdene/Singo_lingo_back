@@ -12,14 +12,8 @@ const ChapterSchema = new Schema(
             type: Number,
             required: true
         },
-        readProcess: {
-            type: Number,
-            required: true,
-            default: 0
-        },
         duration: {
-            type: Number,
-            required: true
+            type: Number
         },
         content: {
             type: String,

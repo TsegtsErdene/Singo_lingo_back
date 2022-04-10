@@ -8,7 +8,8 @@ const NovelSchema = new Schema({
     required: true,
   },
   total_chapter: {
-    type: String,
+    type: Number,
+    default: 0,
     required: true,
   },
   author: {
@@ -41,6 +42,11 @@ const NovelSchema = new Schema({
       ref: "Category",
     },
   ],
+  total_views: {
+    type: Number,
+    default: 0,
+    required: true
+  },
   created_at: {
     type: Date,
     required: true,
