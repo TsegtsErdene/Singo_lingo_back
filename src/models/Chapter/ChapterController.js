@@ -7,24 +7,36 @@ var Chapter = require("./Chapter");
 var Novel = require('../Novel/Novel')
 var ReadingChapter = require("./ReadingChapter");
 
-router.get("/", (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+const wordsPerMinute = 200;
 
-  Chapter.paginate({},
-    {
-      limit,
-      page,
-      populate: "novel",
-    },
-    (err, chapter) => {
+router.get("/recently", (req, res) => {
+  Chapter.find({}, '_id title episode duration')
+  .sort({
+    'created_at': -1
+  })
+  .limit(10)
+  .populate('novel')
+  .exec((err, chapters) => {
       if (err) throw err;
       return res.json({
         code: 0,
-        chapter,
+        chapters,
       });
     }
   );
 });
+
+router.get('/novel/:novel_id', (req, res) => {
+  Chapter.find({novel: req.params.novel_id}, '_id title episode')
+  .exec((err, chapters) => {
+    if(err) throw err
+
+    return res.json({
+      code: 0,
+      chapters
+    })
+  })
+})
 
 router.get("/:chapter_id", (req, res) => {
   Chapter.findById(req.params.chapter_id, (err, chapter) => {
@@ -37,22 +49,22 @@ router.get("/:chapter_id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  req.assert("title", "Title cannot be empty").notEmpty();
-  req.assert("chapter", "Chapter cannot be empty").notEmpty();
-  req.assert("content", "Content cannot be empty").notEmpty();
-
-  const errors = req.validationErrors();
-
-  if (errors) {
-    return res.json({
-      code: 1,
-      errors,
-    });
-  }
-
   Chapter.create(req.body, (err, chapter) => {
     if (err) throw err;
-    
+
+    let textLength = req.body.content.split(" ").length;
+    if(textLength > 0){
+      let value = Math.ceil(textLength / wordsPerMinute);
+
+      chapter.update({
+        duration: value
+      },{
+        upsert: true,
+      }, function(err) {
+        if(err) throw err
+      })
+    }
+
     Novel.findById(chapter.novel, (err, novel) => {
       if(err) throw err
       
@@ -67,39 +79,38 @@ router.post("/", (req, res) => {
       })
 
     })
-    
   });
 });
 
-router.post("/reading", (req, res) => {
-  ReadingChapter.find({ user: id }, (err, read) => {
-    if (err) throw err;
+// router.post("/reading", (req, res) => {
+//   ReadingChapter.find({ user: id }, (err, read) => {
+//     if (err) throw err;
 
-    if (read.length != 0) {
-      ReadingChapter.findByIdAndUpdate(
-        read[0]._id,
-        {
-          reading: false,
-        },
-        (err, read) => {
-          if (err) throw err;
-        }
-      );
-    }
+//     if (read.length != 0) {
+//       ReadingChapter.findByIdAndUpdate(
+//         read[0]._id,
+//         {
+//           reading: false,
+//         },
+//         (err, read) => {
+//           if (err) throw err;
+//         }
+//       );
+//     }
 
-    ReadingChapter.create(
-      {
-        chapter: id,
-        user: id,
-      },
-      (err, read) => {
-        if (err) throw err;
-        return json({
-          code: 0,
-        });
-      }
-    );
-  });
-});
+//     ReadingChapter.create(
+//       {
+//         chapter: id,
+//         user: id,
+//       },
+//       (err, read) => {
+//         if (err) throw err;
+//         return json({
+//           code: 0,
+//         });
+//       }
+//     );
+//   });
+// });
 
 module.exports = router;
