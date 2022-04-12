@@ -4,6 +4,7 @@ const router = express.Router();
 const _ = require("lodash");
 
 const Novel = require("./Novel");
+const Categoty = require("../Category/Category")
 
 router.get("/", (req, res) => {
   Novel.find({}, (err, novels) => {
@@ -17,8 +18,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/popular", (req, res) => {
-  Novel
-  .find({})
+  Novel.find({})
   .sort({
     'total_views': -1
   }).limit(6)
@@ -32,6 +32,32 @@ router.get("/popular", (req, res) => {
     });
   });
 });
+
+router.get("/search", (req, res) => {
+  if(req.query[0] == "ALL"){
+    Novel.find({}, (err, novels) => {
+      if(err) throw err
+      
+      return res.json({
+        code: 0,
+        novels
+      })
+    })
+  }
+
+  Categoty.find({ title: req.query[0] }, (err, category) => {
+    if(err) throw err
+
+    Novel.find({ 'categories': category[0]._id }, (err, novels) => {
+      if(err) throw err
+      
+      return res.json({
+        code: 0,
+        novels
+      })
+    })
+  })
+})
 
 router.get("/:novel_id", (req, res) => {
   Novel.findOne({_id: req.params.novel_id}, (err, novel) => {
