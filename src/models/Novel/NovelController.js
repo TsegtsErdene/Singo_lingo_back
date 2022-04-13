@@ -33,7 +33,7 @@ router.get("/popular", (req, res) => {
   });
 });
 
-router.get("/search", (req, res) => {
+router.get("/filter", (req, res) => {
   if(req.query[0] == "ALL"){
     Novel.find({}, (err, novels) => {
       if(err) throw err
@@ -43,18 +43,28 @@ router.get("/search", (req, res) => {
         novels
       })
     })
-  }
-
-  Categoty.find({ title: req.query[0] }, (err, category) => {
-    if(err) throw err
-
-    Novel.find({ 'categories': category[0]._id }, (err, novels) => {
+  } else {
+    Categoty.find({ title: req.query[0] }, (err, category) => {
       if(err) throw err
       
-      return res.json({
-        code: 0,
-        novels
+      Novel.find({ 'categories': category[0]._id }, (err, novels) => {
+        if(err) throw err
+        
+        return res.json({
+          code: 0,
+          novels
+        })
       })
+    })
+  }
+})
+
+router.get('/search', (req, res) => {
+  Novel.find({ title: new RegExp(req.query[0], "i") }, (err, novels) => {
+    if(err) throw err
+    return res.json({
+      code: 0,
+      novels
     })
   })
 })
