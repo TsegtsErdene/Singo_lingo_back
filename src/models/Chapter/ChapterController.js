@@ -5,7 +5,7 @@ var _ = require("lodash");
 
 var Chapter = require("./Chapter");
 var Novel = require('../Novel/Novel')
-var ReadingChapter = require("./ReadingChapter");
+// var ReadingChapter = require("./ReadingChapter");
 
 const wordsPerMinute = 200;
 
