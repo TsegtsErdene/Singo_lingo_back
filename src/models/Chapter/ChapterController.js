@@ -52,18 +52,18 @@ router.post("/", (req, res) => {
   Chapter.create(req.body, (err, chapter) => {
     if (err) throw err;
 
-    let textLength = req.body.content.split(" ").length;
-    if(textLength > 0){
-      let value = Math.ceil(textLength / wordsPerMinute);
+    // let textLength = req.body.content.split(" ").length;
+    // if(textLength > 0){
+    //   let value = Math.ceil(textLength / wordsPerMinute);
 
-      chapter.update({
-        duration: value
-      },{
-        upsert: true,
-      }, function(err) {
-        if(err) throw err
-      })
-    }
+    //   chapter.update({
+    //     duration: value
+    //   },{
+    //     upsert: true,
+    //   }, function(err) {
+    //     if(err) throw err
+    //   })
+    // }
 
     Novel.findById(chapter.novel, (err, novel) => {
       if(err) throw err
@@ -73,11 +73,9 @@ router.post("/", (req, res) => {
       }, (err) => {
         if(err) throw err
         return json({
-          code: 0,
-          chapter,
+          code: 0
         });
       })
-
     })
   });
 });
