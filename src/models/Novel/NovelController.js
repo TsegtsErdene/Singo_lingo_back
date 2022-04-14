@@ -35,7 +35,7 @@ router.get("/popular", (req, res) => {
 
 router.get("/filter", (req, res) => {
   if(req.query[0] == "ALL"){
-    Novel.find({}, (err, novels) => {
+    return Novel.find({}, (err, novels) => {
       if(err) throw err
       
       return res.json({
@@ -43,20 +43,21 @@ router.get("/filter", (req, res) => {
         novels
       })
     })
-  } else {
-    Categoty.find({ title: req.query[0] }, (err, category) => {
-      if(err) throw err
-      
-      Novel.find({ 'categories': category[0]._id }, (err, novels) => {
-        if(err) throw err
-        
-        return res.json({
-          code: 0,
-          novels
-        })
+  }
+
+  Categoty.find({ title: req.query[0] }, (err, category) => {
+    if(err) throw err;
+
+    Novel.find({ 'categories': category[0]._id }, (err, novels) => {
+      if(err) throw err;
+
+      return res.json({
+        code: 0,
+        novels
       })
     })
-  }
+  })
+  
 })
 
 router.get('/search', (req, res) => {
