@@ -1,6 +1,8 @@
-const Bookmark = require("./Bookmark");
 const express = require("express");
 const router = express.Router();
+
+const Bookmark = require("./Bookmark");
+const Novel = require('../Novel/Novel')
 
 router.get("/", async (req, res) => {
   await Bookmark.find({})
@@ -12,6 +14,20 @@ router.get("/", async (req, res) => {
       });
     })
 });
+
+router.get('/bookmarked_books', (req, res) => {
+  let array = Object.values(req.query)
+  Novel.find({
+    '_id': {
+      $in: array }
+    }, (err, novels) => {
+      if(err) throw err
+      return res.json({
+        code: 0,
+        novels
+      })
+    })
+})
 
 router.post("/", (req, res) => {
   Bookmark.create(req.body, (err, bookmark) => {
