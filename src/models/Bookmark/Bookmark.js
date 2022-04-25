@@ -17,10 +17,10 @@ const BookmarkSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        novel: {
+        novel: [{
             type: Schema.Types.ObjectId,
             ref: 'Novel'
-        }
+        }]
     }
 );
 

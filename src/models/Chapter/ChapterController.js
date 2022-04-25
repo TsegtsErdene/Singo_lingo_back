@@ -5,7 +5,9 @@ var _ = require("lodash");
 
 var Chapter = require("./Chapter");
 var Novel = require('../Novel/Novel')
-// var ReadingChapter = require("./ReadingChapter");
+var {
+  isAuthorized
+} = require('../../middleware/protect')
 
 const wordsPerMinute = 200;
 
@@ -38,7 +40,7 @@ router.get('/novel/:novel_id', (req, res) => {
   })
 })
 
-router.get("/:chapter_id", (req, res) => {
+router.get("/:chapter_id", isAuthorized, (req, res) => {
   Chapter.findById(req.params.chapter_id, (err, chapter) => {
     if (err) throw err;
     return res.json({
@@ -48,7 +50,7 @@ router.get("/:chapter_id", (req, res) => {
   }).populate("novel");
 });
 
-router.post("/", (req, res) => {
+router.post("/", isAuthorized, (req, res) => {
   Chapter.create(req.body, (err, chapter) => {
     if (err) throw err;
 
@@ -79,36 +81,5 @@ router.post("/", (req, res) => {
     })
   });
 });
-
-// router.post("/reading", (req, res) => {
-//   ReadingChapter.find({ user: id }, (err, read) => {
-//     if (err) throw err;
-
-//     if (read.length != 0) {
-//       ReadingChapter.findByIdAndUpdate(
-//         read[0]._id,
-//         {
-//           reading: false,
-//         },
-//         (err, read) => {
-//           if (err) throw err;
-//         }
-//       );
-//     }
-
-//     ReadingChapter.create(
-//       {
-//         chapter: id,
-//         user: id,
-//       },
-//       (err, read) => {
-//         if (err) throw err;
-//         return json({
-//           code: 0,
-//         });
-//       }
-//     );
-//   });
-// });
 
 module.exports = router;

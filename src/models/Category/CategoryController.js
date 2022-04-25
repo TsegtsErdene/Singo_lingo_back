@@ -1,7 +1,10 @@
 const Category = require("./Category");
-const Novel = require("../Novel/Novel");
 const express = require("express");
 const router = express.Router();
+
+var {
+  isAuthorized
+} = require('../../middleware/protect')
 
 router.get("/", (req, res) => {
   Category.find({}, (err, categories) => {
@@ -20,7 +23,7 @@ router.get("/:category_id", (req, res) => {
     },
     (err, novel) => {
       if (err) throw err;
-      res.json({
+      return res.json({
         code: 0,
         novel,
       });
@@ -28,7 +31,7 @@ router.get("/:category_id", (req, res) => {
   );
 });
 
-router.post("/", (req, res) => {
+router.post("/", isAuthorized, (req, res) => {
   // req.assert("title", "Title is not empty").notEmpty();
 
   // const errors = req.validationErrors();
@@ -42,7 +45,7 @@ router.post("/", (req, res) => {
 
   Category.create(req.body, (err, category) => {
     if (err) throw err;
-    res.json({
+    return res.json({
       code: 0,
       category,
     });

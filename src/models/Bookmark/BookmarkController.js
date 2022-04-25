@@ -4,18 +4,22 @@ const router = express.Router();
 const Bookmark = require("./Bookmark");
 const Novel = require('../Novel/Novel')
 
-router.get("/", async (req, res) => {
-  await Bookmark.find({})
-    .exec((err, bookmark) => {
-      if (err) throw err;
-      return res.json({
-        code: 0,
-        bookmark,
-      });
-    })
-});
+var {
+  isAuthorized
+} = require('../../middleware/protect')
 
-router.get('/bookmarked_books', (req, res) => {
+// router.get("/", async (req, res) => {
+//   await Bookmark.find({})
+//     .exec((err, bookmark) => {
+//       if (err) throw err;
+//       return res.json({
+//         code: 0,
+//         bookmark,
+//       });
+//     })
+// });
+
+router.get('/bookmarked_books', isAuthorized, (req, res) => {
   let array = Object.values(req.query)
   Novel.find({
     '_id': {
@@ -29,7 +33,7 @@ router.get('/bookmarked_books', (req, res) => {
     })
 })
 
-router.post("/", (req, res) => {
+router.post("/", isAuthorized, (req, res) => {
   Bookmark.create(req.body, (err, bookmark) => {
     if (err) throw err;
     return res.json({

@@ -6,6 +6,10 @@ const _ = require("lodash");
 const Novel = require("./Novel");
 const Categoty = require("../Category/Category")
 
+var {
+  isAuthorized
+} = require('../../middleware/protect')
+
 router.get("/", (req, res) => {
   Novel.find({}, (err, novels) => {
     if (err) throw err;
@@ -91,7 +95,7 @@ router.get("/:novel_id", (req, res) => {
   }).populate(['categories'])
 });
 
-router.post("/", (req, res) => {
+router.post("/", isAuthorized, (req, res) => {
   Novel.create(req.body, (err, novel) => {
     if (err) throw err;
     return res.json({
