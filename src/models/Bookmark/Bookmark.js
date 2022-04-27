@@ -13,10 +13,6 @@ const BookmarkSchema = new Schema(
             required: true,
             default: Date.now
         },
-        created_by: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
         novel: [{
             type: Schema.Types.ObjectId,
             ref: 'Novel'
