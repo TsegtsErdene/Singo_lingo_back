@@ -19,28 +19,26 @@ var {
 //     })
 // });
 
-router.get('/bookmarked_books', isAuthorized, (req, res) => {
-  let array = Object.values(req.query)
-  Novel.find({
-    '_id': {
-      $in: array }
-    }, (err, novels) => {
-      if(err) throw err
-      return res.json({
-        code: 0,
-        novels
-      })
+router.get('/:user_id', isAuthorized, (req, res) => {
+  Bookmark.find({User: req.params.user_id}, (err, bookmark) => {
+    if(err) throw err
+    return res.json({
+      code: 0,
+      bookmark
     })
+  }).populate(['novel'])
 })
 
 router.post("/", isAuthorized, (req, res) => {
-  Bookmark.create(req.body, (err, bookmark) => {
-    if (err) throw err;
-    return res.json({
-      code: 0,
-      bookmark,
-    });
-  });
+  console.log(req.query)
+  // Bookmark.findById(req.params.)
+  // Bookmark.create(req.body, (err, bookmark) => {
+  //   if (err) throw err;
+  //   return res.json({
+  //     code: 0,
+  //     bookmark,
+  //   });
+  // });
 });
 
 module.exports = router;

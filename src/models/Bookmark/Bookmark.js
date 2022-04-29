@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const BookmarkSchema = new Schema(
     {
-        User: {
+        user: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
