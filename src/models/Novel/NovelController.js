@@ -38,8 +38,13 @@ router.get("/popular", (req, res) => {
 });
 
 router.get("/filter", (req, res) => {
+  const limit = 10
+  const { page = 1 } = req.query
+
+  let query = {}
+
   if(req.query[0] == "ALL"){
-    return Novel.find({}, (err, novels) => {
+    return Novel.paginate(query, {limit, page}, (err, novels) => {
       if(err) throw err
       
       return res.json({

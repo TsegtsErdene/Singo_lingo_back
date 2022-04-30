@@ -40,7 +40,7 @@ router.get('/novel/:novel_id', (req, res) => {
   })
 })
 
-router.get("/:chapter_id", isAuthorized, (req, res) => {
+router.get("/:chapter_id", (req, res) => {
   Chapter.findById(req.params.chapter_id, (err, chapter) => {
     if (err) throw err;
     return res.json({
