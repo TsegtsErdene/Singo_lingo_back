@@ -23,6 +23,7 @@ const NovelSchema = new Schema({
   rating: {
     type: Number,
     required: true,
+    default: 0
   },
   cover_url: {
     type: String,

@@ -6,7 +6,8 @@ const Novel = require('../Novel/Novel')
 
 var {
   isAuthorized
-} = require('../../middleware/protect')
+} = require('../../middleware/protect');
+const { verify } = require("jsonwebtoken");
 
 // router.get("/", async (req, res) => {
 //   await Bookmark.find({})
@@ -19,26 +20,83 @@ var {
 //     })
 // });
 
-router.get('/:user_id', isAuthorized, (req, res) => {
-  Bookmark.find({User: req.params.user_id}, (err, bookmark) => {
+router.get('/user/:user_id', (req, res) => {
+  const limit = 10
+  const { page = 1 } = req.query
+
+  Bookmark.paginate({user: req.params.user_id}, {limit, page, populate: ['novel']}, (err, bookmarks) => {
     if(err) throw err
+    
     return res.json({
       code: 0,
-      bookmark
+      bookmarks
     })
-  }).populate(['novel'])
+  })
 })
 
-router.post("/", isAuthorized, (req, res) => {
-  console.log(req.query)
-  // Bookmark.findById(req.params.)
-  // Bookmark.create(req.body, (err, bookmark) => {
-  //   if (err) throw err;
-  //   return res.json({
-  //     code: 0,
-  //     bookmark,
-  //   });
-  // });
+router.get('/novel', (req, res) => {
+  const { user, novel } = req.query
+
+  Bookmark.findOne({user: user}, (err, bookmark) => {
+    if(err) throw err
+
+    const value = bookmark.novel.find(mark => mark == novel)
+
+    return res.json({
+      code: 0,
+      value
+    })
+  })
+})
+
+router.post("/", (req, res) => {
+  const { user_id, novel_id } = req.body.params
+  // console.log(`${user_id} --- ${novel_id}`)
+  Bookmark.findOne({user: user_id}, async (err, bookmark) => {
+    if(err) throw err
+
+    if(bookmark == null){
+      Bookmark.create({
+        user: user_id,
+        novel: novel_id
+      }, (err, bookmark) => {
+        if(err) throw err
+
+        return res.json({
+          code: 0,
+          bookmark
+        })
+      })
+    } else {
+      const value = await bookmark.novel.find(mark => mark == novel_id)
+
+      if(value == null){
+        Bookmark.updateOne({user: user_id}, {
+          "$push": { novel: novel_id }
+        }, { "new": true, "upsert": true }, (err, bookmark) => {
+          if(err) throw err
+
+          return res.json({
+            code: 0,
+            bookmark,
+            value
+          })
+        })
+      } else {
+        Bookmark.updateOne({user: user_id}, {
+          "$pull": { novel: value }
+        }, { "new": true, "upsert": true }, (err, bookmark) => {
+          if(err) throw err
+          
+          return res.json({
+            code: 0,
+            bookmark,
+            value
+          })
+        })
+      }
+    }
+  })
 });
 
 module.exports = router;
