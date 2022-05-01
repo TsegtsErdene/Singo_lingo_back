@@ -40,11 +40,10 @@ router.get("/firstChapter", async (req, res) => {
 });
 
 router.get("/popular", (req, res) => {
-  Novel.find({})
+  Novel.find({}, '_id title cover_url')
   .sort({
     'total_views': -1
   }).limit(6)
-  .populate(['categories'])
   .exec((err, novels) => {
     if (err) throw err;
 
@@ -57,11 +56,9 @@ router.get("/popular", (req, res) => {
 
 router.get("/filter", (req, res) => {
   const limit = 10
-  const { page = 1 } = req.query
+  const { page = 1, search_value } = req.query
 
-  const value = req.query[0]
-
-  if(value == "ALL"){
+  if(search_value == "ALL"){
     Novel.paginate({}, {limit, page}, (err, novels) => {
       if(err) throw err
 
@@ -71,7 +68,7 @@ router.get("/filter", (req, res) => {
       })
     })
   } else {
-    Categoty.find({ title: value }, (err, category) => {
+    Categoty.find({ title: search_value }, (err, category) => {
       if(err) throw err;
   
       Novel.paginate({ categories: category[0]._id }, {limit, page}, (err, novels) => {
