@@ -97,7 +97,7 @@ router.get('/search', (req, res) => {
 
   Novel.paginate(query, {limit, page}, (err, novels) => {
     if(err) throw err
-    console.log(novels)
+    // console.log(novels)
     return res.json({
       code: 0,
       novels
