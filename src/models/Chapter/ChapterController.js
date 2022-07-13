@@ -11,7 +11,7 @@ var {
 
 const wordsPerMinute = 200;
 
-router.get("/recently", (req, res) => {
+router.get("/recently",  (req, res) => {
   Chapter.find({}, '_id title episode duration')
   .sort({
     'created_at': -1
@@ -50,7 +50,7 @@ router.get("/:chapter_id", (req, res) => {
   }).populate("novel");
 });
 
-router.post("/", isAuthorized, (req, res) => {
+router.post("/", (req, res) => {
   Chapter.create(req.body, (err, chapter) => {
     if (err) throw err;
 

@@ -40,12 +40,19 @@ router.get('/novel', (req, res) => {
   Bookmark.findOne({user: user}, (err, bookmark) => {
     if(err) throw err
 
-    const value = bookmark.novel.find(mark => mark == novel)
+    if(bookmark != null){
+      const value = bookmark.novel.find(mark => mark == novel)
 
-    return res.json({
-      code: 0,
-      value
-    })
+      return res.json({
+        code: 0,
+        value
+      })
+    } else {
+      return res.json({
+        code: 0,
+        value: null
+      })
+    }
   })
 })
 
