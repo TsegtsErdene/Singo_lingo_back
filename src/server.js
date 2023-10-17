@@ -43,7 +43,7 @@ app.use('/api/user', userRouter);
 app.use('/api/pronounce',pronounceRouter);
 
 app.get('/', (req, res) => {
-  res.send("Hello good job")
+  res.send("Here is Singo Lingo back end boyyyy")
 })
 
 const server = app.listen(process.env.PORT, () => {
