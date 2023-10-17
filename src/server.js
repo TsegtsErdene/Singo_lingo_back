@@ -10,6 +10,7 @@ const artistRouter = require("./models/Artist/ArtistController");
 const categoryRouter = require("./models/Category/CategoryController");
 const userRouter = require("./models/User/UserController");
 const songsRouter = require("./models/Songs/SongsController");
+const pronounceRouter=require("./api/pronounce")
 require('dotenv').config()
 
 // mongoose.connect(
@@ -39,6 +40,7 @@ app.use('/api/artist', artistRouter);
 app.use('/api/songs', songsRouter);
 app.use('/api/user_signed_songs', user_signed_songsRouter);
 app.use('/api/user', userRouter);
+app.use('/api/pronounce',pronounceRouter);
 
 app.get('/', (req, res) => {
   res.send("Hello good job")
