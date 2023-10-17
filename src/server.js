@@ -4,13 +4,12 @@ const mongoose = require("mongoose");
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
 
-const demo = require("../src/models/Novel/NovelController");
-const bookmarkRouter = require("./models/Bookmark/BookmarkController");
+const user_signed_songsRouter = require("./models/User_Singed_Songs/User_Signed_SongsController");
+const reelsRouter = require("./models/Reels/ReelsController");
+const artistRouter = require("./models/Artist/ArtistController");
 const categoryRouter = require("./models/Category/CategoryController");
-const chapterRouter = require("./models/Chapter/ChapterController");
-const novelRouter = require("./models/Novel/NovelController");
 const userRouter = require("./models/User/UserController");
-const homeRouter = require("./models/Home/HomeController");
+const songsRouter = require("./models/Songs/SongsController");
 require('dotenv').config()
 
 // mongoose.connect(
@@ -34,14 +33,15 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/bookmark', bookmarkRouter);
+app.use('/api/reels', reelsRouter);
 app.use('/api/category', categoryRouter);
-app.use('/api/chapter', chapterRouter);
-app.use('/api/novel', novelRouter);
+app.use('/api/artist', artistRouter);
+app.use('/api/songs', songsRouter);
+app.use('/api/user_signed_songs', user_signed_songsRouter);
 app.use('/api/user', userRouter);
 
 app.get('/', (req, res) => {
-  res.send("Hello server")
+  res.send("Hello good job")
 })
 
 const server = app.listen(process.env.PORT, () => {

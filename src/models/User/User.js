@@ -8,6 +8,11 @@ const UserSchema = new Schema(
     {
         username: {
             type: String,
+            required: true,
+            unique: true
+        },
+        name:{
+            type: String,
             required: true
         },
         password: {
@@ -23,10 +28,25 @@ const UserSchema = new Schema(
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Имэйл хаяг буруу байна'
             ]
         },
-        role: {
-            type: String,
-            enum: ['translator', 'reader'],
-            default: 'reader',
+        age:{
+            type: Number,
+            required: true
+        },
+        phone:{
+            type: Number,
+            required: true
+        },
+        profile:{
+            type: Buffer
+        },
+        user_singed_songs:{
+            type: Array
+        },
+        reels:{
+            type: Array
+        },
+        claim:{
+            type: Number,
             required: true
         },
         passwordResetToken: String,
@@ -50,9 +70,7 @@ UserSchema.pre('save', async function (next) {
 UserSchema.methods.getJWT = function () {
     const token = jwt.sign({
         id: this._id
-    }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE
-    })
+    }, process.env.JWT_SECRET)
 
     return token
 }

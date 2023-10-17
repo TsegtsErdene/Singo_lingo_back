@@ -1,23 +1,21 @@
-const Category = require("./Category");
+const Artist = require("./Artist");
 const express = require("express");
 const router = express.Router();
 
-
-
 router.get("/", (req, res) => {
-  Category.find({}, (err, categories) => {
+  Artist.find({}, (err, artists) => {
       if (err) throw err;
       return res.json({
         code: 0,
-        categories,
+        artists,
       });
     })
 });
 
-router.get("/:category_id", (req, res) => {
-  Category.findById(
+router.get("/:artist_id", (req, res) => {
+    Artist.findById(
     {
-      category: req.params.category_id,
+      artist: req.params.artist_id,
     },
     (err, novel) => {
       if (err) throw err;
@@ -30,11 +28,12 @@ router.get("/:category_id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  Category.create(req.body, (err, category) => {
+
+  Artist.create(req.body, (err, artist) => {
     if (err) throw err;
     return res.json({
       code: 0,
-      category,
+      artist,
     });
   });
 });
