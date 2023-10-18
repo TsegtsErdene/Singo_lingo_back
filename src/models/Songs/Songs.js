@@ -9,20 +9,17 @@ const SongsSchema = new Schema(
             required: true,
         },
         profile: {
-            type: Buffer,
-            required: true
+            type: Buffer
         },
         artists: {
             type: Schema.Types.ObjectId,
             ref: 'Artist'
         },
         lyrics: {
-            type: String,
-            required: true
+            type: String
         },
         audio: {
-            type: Buffer,
-            required: true
+            type: Buffer
         },
         categories: {
             type: Schema.Types.ObjectId,

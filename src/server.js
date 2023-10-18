@@ -32,7 +32,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb'}));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false, limit:10000 }));
 
 app.use('/api/reels', reelsRouter);
 app.use('/api/category', categoryRouter);

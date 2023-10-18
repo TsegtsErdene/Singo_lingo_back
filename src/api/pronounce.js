@@ -35,14 +35,33 @@ const request = require("request");
 const fs = require("fs");
 const express = require("express");
 const router = express.Router();
+const path = require("path");
+const multer = require("multer");
 
-router.post("/", (req,res) => {
+
+const upload = multer({dest:path.join(__dirname,'../files/')});
+
+
+router.get("/",(req,res) => {
+    res.sendFile(path.join(__dirname,"../views/file.html"))
+})
+
+router.post('/test', upload.single('file'), (req, res) => {
+    console.log(req.file.filename)
+    res.json({ message: 'File uploaded successfully' });
+  });
+router.post("/", upload.single('file'), async(req,res) => {
+
+    console.log(req.file.filename)
+    var fileName = req.file.filename
+    console.log("fname",fileName)
+
     var subscriptionKey = "c6f6ab2a17ec4b69a947e8d1365d2cf3" // replace this with your subscription key
     var region = "eastus" // replace this with the region corresponding to your subscription key, e.g. westus, eastasia
 
     // build pronunciation assessment parameters
-    var referenceText = "Today was a beautiful day. We had a great time taking a long walk outside in the morning. The countryside was in full bloom, yet the air was crisp and cold. Towards the end of the day, clouds came in, forecasting much needed rain.";
-    var pronAssessmentParamsJson = `{"ReferenceText":"${referenceText}","GradingSystem":"HundredMark","Dimension":"Comprehensive"}`;
+    //var referenceText = "Today was a beautiful day. We had a great time taking a long walk outside in the morning. The countryside was in full bloom, yet the air was crisp and cold. Towards the end of the day, clouds came in, forecasting much needed rain.";
+    var pronAssessmentParamsJson = `{"ReferenceText":"${req.body.lyrics}","GradingSystem":"HundredMark","Dimension":"Comprehensive"}`;
     var pronAssessmentParams = Buffer.from(pronAssessmentParamsJson, 'utf-8').toString('base64');
 
     // build request
@@ -65,22 +84,24 @@ router.post("/", (req,res) => {
     var uploadFinishTime;
 
     var req = request.post(options);
+    var resultData = '';
     req.on("response", (resp) => {
         resp.on("data", (chunk) => {
-            var result = chunk.toString('utf-8');
+            resultData  += chunk.toString('utf-8');
+        });
+        resp.on("end",() => {
             console.log("Pronunciation assessment result:\n");
-            console.log(result); // the result is a JSON string, you can parse it with JSON.parse() when consuming it
+            console.log(resultData); // the result is a JSON string, you can parse it with JSON.parse() when consuming it
             var getResponseTime = Date.now();
             console.log(`\nLatency = ${getResponseTime - uploadFinishTime}ms`);
-            return res.json({
-                code: 0,
-                result,
-              });
-        });
+
+            res.json({resutlt: JSON.parse(resultData)})
+        })
     });
 
     // Read the WAV file and send it as the audio stream
-    var audioStream = fs.createReadStream("reading.wav", { highWaterMark: 1024 });
+
+    var audioStream = fs.createReadStream(path.join(__dirname,`../files/${fileName}`), { highWaterMark: 1024 });
     audioStream.on("data", (data) => {
         sleep(data.length / 32); // to simulate human speaking rate
     });
