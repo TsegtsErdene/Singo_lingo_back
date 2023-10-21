@@ -45,7 +45,7 @@ app.use("/api/artist", artistRouter);
 app.use("/api/songs", songsRouter);
 app.use("/api/user_signed_songs", user_signed_songsRouter);
 app.use("/api/user", upload.single("profile"), userRouter);
-app.use("/api/pronounce", pronounceRouter);
+app.use("/api/pronounce", upload.single("file"), pronounceRouter);
 
 app.get("/", (req, res) => {
   res.send("Here is Singo Lingo back end boyyyy");

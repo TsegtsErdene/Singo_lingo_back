@@ -44,11 +44,11 @@ router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/file.html"));
 });
 
-router.post("/test", upload.single("file"), (req, res) => {
+router.post("/test", (req, res) => {
   console.log(req.file.filename);
   res.json({ message: "File uploaded successfully" });
 });
-router.post("/", upload.single("file"), async (req, res) => {
+router.post("/", async (req, res) => {
   console.log(req.file.filename);
   var fileName = req.file.filename;
   console.log("fname", fileName);
@@ -102,7 +102,7 @@ router.post("/", upload.single("file"), async (req, res) => {
   // Read the WAV file and send it as the audio stream
 
   var audioStream = fs.createReadStream(
-    path.join(__dirname, `../files/${fileName}`),
+    path.join(__dirname, `../../records/${fileName}`),
     { highWaterMark: 1024 }
   );
   audioStream.on("data", (data) => {
