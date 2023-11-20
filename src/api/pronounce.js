@@ -42,14 +42,11 @@ const multer = require("multer");
 const upload = multer({dest:path.join(__dirname,'../files/')});
 
 
-router.get("/",(req,res) => {
-    res.sendFile(path.join(__dirname,"../views/file.html"))
-})
+// router.get("/",(req,res) => {
+//     res.sendFile(path.join(__dirname,"../views/file.html"))
+// })
 
-router.post('/test', upload.single('file'), (req, res) => {
-    console.log(req.file.filename)
-    res.json({ message: 'File uploaded successfully' });
-  });
+
 router.post("/", upload.single('file'), async(req,res) => {
 
     console.log(req.file.filename)
